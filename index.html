@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistic Map Simulation</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        .row { display: flex; justify-content: center; align-items: center;}
+        .col { margin: 10px; }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col row"><label for="rminSlider">Start: </label><input id="rminSlider" min="0" max="4" value="0" ></div>
+        <div class="col row"><label for="rmaxSlider">End: </label><input id="rmaxSlider" min="0" max="4" value="4" ></div>
+    </div>
+    <canvas id="logisticCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('logisticCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const rminSlider = document.getElementById('rminSlider');
+        const rmaxSlider = document.getElementById('rmaxSlider');
+
+        rminSlider.addEventListener('input', () => {
+            RMIN = rminSlider.value * 1;
+            draw();
+        });
+
+        rmaxSlider.addEventListener('input', () => {
+            RMAX = Math.max(rmaxSlider.value * 1, RMIN + 0.01);
+            console.log(RMAX);
+            rmaxSlider.value = RMAX;
+            draw();
+        });
+
+        let RMIN = 0;
+        let RMAX = 4;
+
+        function draw() {
+            console.log(RMIN, RMAX);
+            ctx.clearRect(0, 0, width, height);
+            for (let r = RMIN; r < RMAX; r += (RMAX-RMIN)/width) {
+                let x = 0.5;
+                for (let i = 0; i < 1000; i++) {
+                    x = r * x * (1 - x);
+                }
+                for (let i = 0; i < 200; i++) {
+                    x = r * x * (1 - x);
+                    ctx.fillStyle = 'blue';
+                    ctx.fillRect((r - RMIN) * width / (RMAX-RMIN), height - x * height, 1, 1);
+                }
+            }
+        }
+        draw();
+        
+
+    </script>
+</body>
+</html>
